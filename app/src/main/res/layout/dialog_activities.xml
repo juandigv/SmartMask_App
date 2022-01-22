@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora Inicio de Actividades"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+
+    <TimePicker
+        android:id="@+id/time_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:timePickerMode="spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView1"
+     />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hora Fin de Actividades"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_below="@+id/time_start"
+        />
+
+    <TimePicker
+        android:id="@+id/time_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:timePickerMode="spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView2"
+        />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nota: Las alarmas para actividades se activan cada 3 horas"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:gravity="center"
+        android:layout_below="@+id/time_end"
+        />
+
+
+
+
+</RelativeLayout>

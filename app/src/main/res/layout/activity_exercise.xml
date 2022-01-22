@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExerciseActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connected Device:"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textActBtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SampleName"
+            android:textAlignment="center"
+            android:textSize="34dp" />
+
+        <TextView
+            android:id="@+id/textActBtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SampleAddress"
+            android:textAlignment="center"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tiempo Restante:"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="60dp"
+            />
+        <TextView
+            android:id="@+id/textActTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="05:00"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="12dp"
+        >
+            <TextView
+                android:id="@+id/textFTempLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Frec. Temperatura:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textFMicLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Frec. Micrófono:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textValidLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Validez:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textTRespLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tipo Respiración:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textRatioLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ratio: "
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textTVOCLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TVOC:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/textCO2Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CO2:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            >
+
+        <TextView
+            android:id="@+id/textFTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textFMic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textValid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Undefined"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textTResp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Undefined"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textRatio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1:NaN"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textTVOC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN ppb"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textCO2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN ppm"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:text="Iniciar Actividad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabActOxi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/green_viridian"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnStart"
+        app:srcCompat="@drawable/ic_add" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

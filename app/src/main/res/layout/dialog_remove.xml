@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewWarning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ADVERTENCIA"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageWarning"
+        android:text="Concentración de aire dentro de la máscara es muy alto."
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textViewNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewInfo"
+        android:text="Por favor, quitese la máscara por un tiempo."
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/imageWarning"
+        android:layout_width="169dp"
+        android:layout_height="166dp"
+        android:layout_below="@+id/textViewWarning"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ic_warning"
+        app:tint="@color/blue_steel" />
+</RelativeLayout>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+
+        <Button
+            android:id="@+id/buttonSync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sincronizar"
+            android:gravity="fill"
+            android:layout_margin="8dp"
+            />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Connected Device:"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textBtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SampleName"
+            android:textAlignment="center"
+            android:textSize="34dp" />
+
+        <TextView
+            android:id="@+id/textBtAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SampleAddress"
+            android:textAlignment="center"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textTemp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN °C"
+            android:textAlignment="center"
+            android:textSize="34dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textCO2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN ppm (CO2)"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textTVOC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN ppb (TVOC)"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:id="@+id/chartData"
+            android:layout_marginTop="64dp"
+            />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Realizar Ejercicios"
+        app:layout_constraintBottom_toTopOf="@+id/btnMsg"
+        />
+
+    <Button
+        android:id="@+id/btnMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configurar Mensajes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabOxi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/green_viridian"
+        android:clickable="true"
+        android:focusable="true"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnMsg"
+        app:srcCompat="@drawable/ic_add" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

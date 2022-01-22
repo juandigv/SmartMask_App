@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="green_acid">#FFA5BE00</color>
+    <color name="green_max">#FF679436</color>
+    <color name="green_viridian">#FF55876C</color>
+    <color name="blue_steel">#FF427AA1</color>
+    <color name="blue_sapphire">#FF05668D</color>
+    <color name="black">#FF0A0A0A</color>
+    <color name="white">#FFE3DAC9</color>
+</resources>
