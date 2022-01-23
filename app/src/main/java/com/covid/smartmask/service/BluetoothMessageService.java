@@ -76,20 +76,6 @@ public class BluetoothMessageService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        bluetoothIn = new Handler(new IncomingHandlerCallback());
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        VerificarEstadoBT();
-
-        DbHelper dbHelper =  DbHelper.getInstance(getApplicationContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        if(db != null){
-            // Toast.makeText(MainActivity.this, "DB Created",Toast.LENGTH_LONG).show();
-            Log.d("Database BtService","DB was Created");
-        }else {
-            Log.d("Database BtService","DB Creation Failed");
-            Toast.makeText(getApplicationContext(), "DB Creation Failed",Toast.LENGTH_LONG).show();
-        }
-
         co2LiveData = new MutableLiveData<>();
         tvocLiveData = new MutableLiveData<>();
         temperatureLiveData = new MutableLiveData<>();
@@ -102,6 +88,10 @@ public class BluetoothMessageService extends Service {
         btNameLiveData = new MutableLiveData<>();
         btAddressLiveData = new MutableLiveData<>();
 
+        bluetoothIn = new Handler(new IncomingHandlerCallback());
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        VerificarEstadoBT();
+
         androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         BtName = intent.getStringExtra(EXTRA_DEVICE_ADDRESS);
@@ -109,25 +99,42 @@ public class BluetoothMessageService extends Service {
         BluetoothDevice device = btAdapter.getRemoteDevice(BtAddress);
         btNameLiveData.setValue(BtName);
         btAddressLiveData.setValue(BtAddress);
-        try
-        {
-            btSocket = createBluetoothSocket(device);
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), "La creación del Socket fallo", Toast.LENGTH_LONG).show();
-        }
-        try
-        {
-            btSocket.connect();
-        } catch (IOException e) {
-            try {
-                btSocket.close();
-            } catch (IOException e2) {}
-        }
 
-        myConexionBT = new BluetoothMessageService.ConnectedThread(btSocket);
-        myConexionBT.start();
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        DbHelper dbHelper =  DbHelper.getInstance(getApplicationContext());
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        if(db != null){
+                            // Toast.makeText(MainActivity.this, "DB Created",Toast.LENGTH_LONG).show();
+                            Log.d("Database BtService","DB was Created");
+                        }else {
+                            Log.d("Database BtService","DB Creation Failed");
+                            Toast.makeText(getApplicationContext(), "DB Creation Failed",Toast.LENGTH_LONG).show();
+                        }
 
-        sendBtMessage("{\"temp\":1}");
+                        try
+                        {
+                            btSocket = createBluetoothSocket(device);
+                        } catch (IOException e) {
+                            Toast.makeText(getBaseContext(), "La creación del Socket fallo", Toast.LENGTH_LONG).show();
+                        }
+                        try
+                        {
+                            btSocket.connect();
+                        } catch (IOException e) {
+                            try {
+                                btSocket.close();
+                            } catch (IOException e2) {}
+                        }
+                        myConexionBT = new BluetoothMessageService.ConnectedThread(btSocket);
+                        myConexionBT.start();
+
+                        sendBtMessage("{\"temp\":1}");
+                    }
+                }
+        ).start();
         return super.onStartCommand(intent, flags, startId);
     }
 

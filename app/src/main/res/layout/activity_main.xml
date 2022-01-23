@@ -18,16 +18,6 @@
         app:layout_constraintTop_toTopOf="parent"
         >
 
-
-        <Button
-            android:id="@+id/buttonSync"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sincronizar"
-            android:gravity="fill"
-            android:layout_margin="8dp"
-            />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"

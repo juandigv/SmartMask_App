@@ -1,5 +1,5 @@
 package com.covid.smartmask;
-//Remove until you stop seeing this
+
 import static com.covid.smartmask.DispositivosVinculados.EXTRA_DEVICE_ADDRESS;
 import static com.covid.smartmask.DispositivosVinculados.EXTRA_DEVICE_NAME;
 
@@ -17,12 +17,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -37,13 +37,10 @@ import com.covid.smartmask.db.DbData;
 import com.covid.smartmask.db.DbHelper;
 import com.covid.smartmask.dialog.DialogActivities;
 import com.covid.smartmask.dialog.DialogOximetro;
+import com.covid.smartmask.dialog.DialogSync;
 import com.covid.smartmask.dialog.DialogTimer;
 import com.covid.smartmask.dialog.DialogWarning;
 import com.covid.smartmask.notification.AlarmReciever;
-import com.covid.smartmask.rest.OximeterData;
-import com.covid.smartmask.rest.PostModel;
-import com.covid.smartmask.rest.PostRequestAPI;
-import com.covid.smartmask.rest.SensorData;
 import com.covid.smartmask.service.BluetoothMessageService;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -54,27 +51,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.io.Console;
-import java.sql.PreparedStatement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener, DialogSync.DialogSyncListener{
 
-public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener{
-
-    public static String BASE = "https://smartmask-api.herokuapp.com/api/";
-    public static String SENSORURL = BASE + "sensor";
-    public static String OXIMETERURL = BASE + "oximeter";
     private TextView textBtName;
     private TextView textBtAddress;
     private TextView textTemp;
@@ -83,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private Button btnActivity;
     private Button btnMsg;
     private FloatingActionButton fabOxi;
-    private Button buttonSync;
     private LineChart chartData;
     private Thread thread;
     private boolean plotData = true;
@@ -114,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private PendingIntent pendingIntent;
     private String BtAddress;
     private String BtName;
-    private Retrofit retrofit;
 
     boolean mBounded;
     BluetoothMessageService BtMsgService;
@@ -149,11 +127,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             }
         }
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.30:4004/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
         textBtName = findViewById(R.id.textBtName);
         textBtAddress = findViewById(R.id.textBtAddress);
         btnActivity = findViewById(R.id.btnActivity);
@@ -163,13 +136,15 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         textTVOC = findViewById(R.id.textTVOC);
         chartData = findViewById(R.id.chartData);
         fabOxi = findViewById(R.id.fabOxi);
-        buttonSync = findViewById(R.id.buttonSync);
 
 
         androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         phoneVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         initializeChart();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        setSyncValues(settings.getString("syncURL", ""),settings.getBoolean("syncData", false));
+
 
         btnActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,96 +180,13 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                 showOxigenDialog();
             }
         });
-        buttonSync.setOnClickListener(new View.OnClickListener() {
+        textBtName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
-                consoleDatabase();
+            public boolean onLongClick(View view) {
+                showSyncDialog();
+                return true;
             }
         });
-    }
-
-    @SuppressLint("Range")
-    private void consoleDatabase(){
-        Runnable runnable = new Runnable(){
-            public void run() {
-                PostRequestAPI postRequestAPI = retrofit.create(PostRequestAPI.class);
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Cursor c;
-                Date cursorDate;
-                String formattedList;
-                List<Integer> syncedSensorList = new ArrayList<Integer>();
-                dbData = new DbData(MainActivity.this);
-                c = dbData.getReadableDatabase().rawQuery("SELECT * FROM "+DbHelper.TABLE_SENSOR + " WHERE synced = 0", null);
-
-                if (c.moveToFirst()){
-                    do {
-                        try {
-                            cursorDate = formatter.parse(c.getString(9)+"");
-
-                            SensorData sensorData = new SensorData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),c.getInt(3),c.getInt(4),c.getInt(5),c.getInt(6),c.getInt(7),c.getDouble(8),cursorDate);
-                            syncedSensorList.add(sensorData.getId());
-
-                            Call<SensorData> sensorCall = postRequestAPI.PostSensorData(sensorData);
-                            sensorCall.enqueue(new Callback<SensorData>() {
-                                @Override
-                                public void onResponse(Call<SensorData> call, Response<SensorData> response) {
-                                    Log.d("CRUD","Synced Sensor Data");
-                                }
-
-                                @Override
-                                public void onFailure(Call<SensorData> call, Throwable t) {
-                                   //
-                                }
-                            });
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    } while(c.moveToNext());
-                }
-                c.close();
-                formattedList = syncedSensorList.toString().replace("[","(").replace("]",")");
-                for(Integer id: syncedSensorList) {
-                    dbData.getWritableDatabase().execSQL("UPDATE " + DbHelper.TABLE_SENSOR + " SET synced = 1 WHERE id in " + formattedList);
-                }
-                dbData.close();
-
-                dbData = new DbData(MainActivity.this);
-                List<Integer> syncedOxiList = new ArrayList<Integer>();
-                c = dbData.getReadableDatabase().rawQuery("SELECT * FROM "+DbHelper.TABLE_OXI + " WHERE synced = 0", null);
-                if (c.moveToFirst()){
-                    do {
-                        try {
-                            cursorDate = formatter.parse(c.getString(3)+"");
-
-
-                            OximeterData oxiData = new OximeterData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),cursorDate);
-                            Call<OximeterData> sensorCall = postRequestAPI.PostOximeterData(oxiData);
-                            syncedOxiList.add(oxiData.getId());
-                            sensorCall.enqueue(new Callback<OximeterData>() {
-                                @Override
-                                public void onResponse(Call<OximeterData> call, Response<OximeterData> response) {
-                                    Log.d("CRUD","Synced Oximeter Data");
-                                }
-
-                                @Override
-                                public void onFailure(Call<OximeterData> call, Throwable t) {
-                                    //
-                                }
-                            });
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                    } while(c.moveToNext());
-                }
-                c.close();
-                formattedList = syncedOxiList.toString().replace("[","(").replace("]",")");
-                dbData.getWritableDatabase().execSQL("UPDATE "+DbHelper.TABLE_OXI+" SET synced = 1 WHERE id in "+formattedList);
-                dbData.close();
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-
     }
 
     private void createNotificationChannelExercise() {
@@ -347,6 +239,11 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private void showOxigenDialog(){
         DialogOximetro dialogOximetro = new DialogOximetro();
         dialogOximetro.show(getSupportFragmentManager(),"Oximetro");
+    }
+
+    private void showSyncDialog(){
+        DialogSync dialogSync = new DialogSync();
+        dialogSync.show(getSupportFragmentManager(),"Data Sync");
     }
 
     private void initializeChart(){
@@ -457,6 +354,24 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         }
     }
 
+    @Override
+    public void setSyncValues(String url, Boolean sync) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("syncData", sync);
+        editor.putString("syncURL", url);
+        editor.commit();
+        if(sync && !url.isEmpty()){
+            if(alarmManager == null){
+                alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            }
+            Intent intent = new Intent(this, AlarmSync.class);
+            PendingIntent pendingIntent  = PendingIntent.getBroadcast(this,115,intent,0);
+            Toast.makeText(getBaseContext(), "Sincronización Activa", Toast.LENGTH_LONG).show();
+            alarmManager.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent );
+        }
+    }
+
     public void setExerciseAlarms(boolean showToasts, int calendarStartHour, int calendarStartMinute, int calendarEndHour, int calendarEndMinute){
         int start = (calendarStartHour*60) +calendarStartMinute;
         int end = (calendarEndHour *60)+calendarEndMinute;
@@ -474,27 +389,29 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         calendarStart.set(Calendar.MILLISECOND, 0);
         Intent intent = new Intent(this, AlarmReciever.class);
         for(int i = 0;i<=8;i++){
-            pendingIntent = PendingIntent.getBroadcast(this,0,intent,i);
+            pendingIntent = PendingIntent.getBroadcast(this,i,intent,0);
             alarmManager.cancel(pendingIntent);
         }
+        Toast.makeText(getBaseContext(), String.format("Total Alarmas: %d",numberOfAlarms), Toast.LENGTH_LONG).show();
+
         for(int i = 0; i< numberOfAlarms; i++){
             calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY,calendarStartHour+(3*i));
             calendar.set(Calendar.MINUTE, calendarStartMinute);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
-            pendingIntent = PendingIntent.getBroadcast(this,0,intent,i);
+            pendingIntent = PendingIntent.getBroadcast(this,i,intent,0);
 
             Log.d("Calendar","Setting Up Alarms");
             if(Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis() < 0){
                 alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
                         AlarmManager.INTERVAL_DAY,pendingIntent);
                 if(showToasts){
-                    Toast.makeText(getBaseContext(), "Activando alarma para "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), String.format("Activando alarma para %02d:%02d",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
                 }
               }else{
                 if(showToasts){
-                    Toast.makeText(getBaseContext(), "Desactivando alarma atrasada "+calendar.get(Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), String.format("Activando alarma atrasada para %02d:%02d",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -605,16 +522,14 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if(mBounded) {
             Log.d("BTBind","Unbinded");
             unbindService(mConnection);
             mBounded = false;
         }
     };
-
-
 
     private void addEntry(int value, int setNumber){
         LineData data = chartData.getData();

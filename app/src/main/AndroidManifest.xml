@@ -36,6 +36,7 @@
         <receiver android:name=".notification.AlarmExerciseReciever"/>
         <receiver android:name=".notification.AlarmWarningReciever"/>
         <service android:name=".service.BluetoothMessageService"/>
+        <receiver android:name=".AlarmSync"/>
     </application>
 
 </manifest>
