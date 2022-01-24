@@ -75,8 +75,8 @@ public class AlarmSync extends BroadcastReceiver {
                     if (c.moveToFirst()){
                         do {
                             try {
-                                cursorDate = formatter.parse(c.getString(9)+"");
-                                SensorData sensorData = new SensorData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),c.getInt(3),c.getInt(4),c.getInt(5),c.getInt(6),c.getInt(7),c.getDouble(8),cursorDate);
+                                cursorDate = formatter.parse(c.getString(10)+"");
+                                SensorData sensorData = new SensorData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),c.getInt(3),c.getInt(4),c.getInt(5),c.getInt(6),c.getInt(7),c.getInt(8),c.getDouble(9),cursorDate);
                                 Call<SensorData> sensorCall = postRequestAPI.PostSensorData(sensorData);
                                 sensorCall.enqueue(new Callback<SensorData>() {
                                     @Override

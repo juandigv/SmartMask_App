@@ -73,14 +73,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private Vibrator phoneVibrator;
     private String androidId;
 
-    private int co2 = 0;
-    private int tvoc = 0;
-    private int temp_freq = 0;
-    private int mic_freq  = 0;
-    private int valid = 2;
-    private int resp_type = 0;
-    private int ratio = 0;
-    private int temperature = 0;
     private int temp_msg_time = 300000;
 
     public static final int dangerCO2 = 600;

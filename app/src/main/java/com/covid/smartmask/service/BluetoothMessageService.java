@@ -48,6 +48,7 @@ public class BluetoothMessageService extends Service {
     private int tvoc = 0;
     private int temp_freq = 0;
     private int mic_freq  = 0;
+    private int resp_freq  = 0;
     private int valid = 2;
     private int resp_type = 0;
     private float ratio = 0;
@@ -63,6 +64,7 @@ public class BluetoothMessageService extends Service {
     public MutableLiveData<Integer> tvocLiveData;
     public MutableLiveData<Integer> temperatureLiveData;
     public MutableLiveData<Integer> temp_freqLiveData;
+    public MutableLiveData<Integer> resp_freqLiveData;
     public MutableLiveData<Integer> mic_freqLiveData;
     public MutableLiveData<Integer> validLiveData;
     public MutableLiveData<Integer> resp_typeLiveData;
@@ -80,6 +82,7 @@ public class BluetoothMessageService extends Service {
         tvocLiveData = new MutableLiveData<>();
         temperatureLiveData = new MutableLiveData<>();
         temp_freqLiveData = new MutableLiveData<>();
+        resp_freqLiveData = new MutableLiveData<>();
         mic_freqLiveData = new MutableLiveData<>();
         validLiveData = new MutableLiveData<>();
         resp_typeLiveData = new MutableLiveData<>();
@@ -180,6 +183,13 @@ public class BluetoothMessageService extends Service {
                             }
 
                             try{
+                                resp_freq = Integer.parseInt(messageJSON.get("fresp").toString());
+                                resp_freqLiveData.setValue(resp_freq);
+                            }catch(Exception ex){
+                                ex.toString();
+                            }
+
+                            try{
                                 valid = Integer.parseInt(messageJSON.get("val").toString());
                                 validLiveData.setValue(valid);
                             }catch(Exception ex){
@@ -216,7 +226,7 @@ public class BluetoothMessageService extends Service {
                             Log.d("Service Message","tvoc: " + tvoc);
 
                             dbData = new DbData(getApplicationContext());
-                            long id = dbData.insertDataSensor(temperature, co2, tvoc,temp_freq,  mic_freq,  valid,  resp_type, ratio);
+                            long id = dbData.insertDataSensor(temperature, co2, tvoc,temp_freq, mic_freq, resp_freq, valid, resp_type, ratio);
                             dbData.close();
                             if(id > 0){
                                 Log.d("Database BTService","Data Entry Success");
@@ -319,6 +329,7 @@ public class BluetoothMessageService extends Service {
     public MutableLiveData<Integer> getTemperature(){ return temperatureLiveData; }
     public MutableLiveData<Integer> getTemp_freq(){ return temp_freqLiveData; }
     public MutableLiveData<Integer> getMic_freq(){ return mic_freqLiveData; }
+    public MutableLiveData<Integer> getResp_freq(){ return resp_freqLiveData; }
     public MutableLiveData<Integer> getValid(){ return validLiveData; }
     public MutableLiveData<Integer> getResp_type(){ return resp_typeLiveData; }
     public MutableLiveData<Float> getRatio(){ return ratioLiveData; }

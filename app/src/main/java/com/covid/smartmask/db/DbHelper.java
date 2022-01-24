@@ -12,7 +12,7 @@ import com.covid.smartmask.MainActivity;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static DbHelper mInstance = null;
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static  final String DATABASE_NAME = "smartmask.db";
     public static final String TABLE_SENSOR = "t_smsensor";
     public static final String TABLE_OXI = "t_smoxi";
@@ -37,6 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 "tvoc INTEGER NOT NULL," +
                 "temp_freq INTEGER NOT NULL," +
                 "mic_freq INTEGER NOT NULL," +
+                "resp_freq INTEGER NOT NULL," +
                 "valid INTEGER NOT NULL," +
                 "resp_type INTEGER NOT NULL," +
                 "ratio REAL NOT NULL," +

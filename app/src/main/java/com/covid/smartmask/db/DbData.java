@@ -15,7 +15,7 @@ public class DbData extends DbHelper{
         this.context = context;
     }
 
-    public long insertDataSensor(int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int valid, int resp_type, float ratio){
+    public long insertDataSensor(int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int resp_freq, int valid, int resp_type, float ratio){
         long id = 0;
 
         try {
@@ -28,6 +28,7 @@ public class DbData extends DbHelper{
             values.put("tvoc", tvoc);
             values.put("temp_freq", temp_freq);
             values.put("mic_freq", mic_freq);
+            values.put("resp_freq", resp_freq);
             values.put("valid", valid);
             values.put("resp_type", resp_type);
             values.put("ratio", ratio);

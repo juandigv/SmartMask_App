@@ -93,6 +93,13 @@
                 android:textAlignment="textEnd"
                 android:textSize="20sp"/>
             <TextView
+                android:id="@+id/textFRespLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Frec. Resp.:"
+                android:textAlignment="textEnd"
+                android:textSize="20sp"/>
+            <TextView
                 android:id="@+id/textValidLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -149,6 +156,13 @@
             android:textSize="20sp"/>
         <TextView
             android:id="@+id/textFMic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NaN"
+            android:textAlignment="textStart"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/textFResp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="NaN"

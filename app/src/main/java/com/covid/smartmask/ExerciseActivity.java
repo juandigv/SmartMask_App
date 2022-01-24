@@ -37,6 +37,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     private TextView textActBtAddress;
     private TextView textFTemp;
     private TextView textFMic;
+    private TextView textFResp;
     private TextView textValid;
     private TextView textTResp;
     private TextView textRatio;
@@ -71,6 +72,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
         textActBtAddress = findViewById(R.id.textActBtAddress);
         textFTemp = findViewById(R.id.textFTemp);
         textFMic = findViewById(R.id.textFMic);
+        textFResp = findViewById(R.id.textFResp);
         textValid = findViewById(R.id.textValid);
         textTResp = findViewById(R.id.textTResp);
         textRatio = findViewById(R.id.textRatio);
@@ -237,6 +239,15 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                         }
                     };
 
+                    final Observer<Integer> resp_freqObserver = new Observer<Integer>() {
+                        @Override
+                        public void onChanged(Integer integer) {
+                            if (inExercise) {
+                                textFResp.setText(integer.toString());
+                            }
+                        }
+                    };
+
                     final Observer<Integer> validObserver = new Observer<Integer>() {
                         @Override
                         public void onChanged(Integer integer) {
@@ -294,6 +305,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                     BtMsgService.getTVOC().observe(ExerciseActivity.this, tvocObserver);
                     BtMsgService.getTemp_freq().observe(ExerciseActivity.this, temp_freqObserver);
                     BtMsgService.getMic_freq().observe(ExerciseActivity.this, mic_freqObserver);
+                    BtMsgService.getResp_freq().observe(ExerciseActivity.this, resp_freqObserver);
                     BtMsgService.getValid().observe(ExerciseActivity.this, validObserver);
                     BtMsgService.getResp_type().observe(ExerciseActivity.this, resp_typeObserver);
                     BtMsgService.getRatio().observe(ExerciseActivity.this, ratioObserver);

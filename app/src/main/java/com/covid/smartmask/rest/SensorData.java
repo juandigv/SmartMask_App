@@ -13,12 +13,13 @@ public class SensorData {
     int tvoc;
     int temp_freq;
     int mic_freq;
+    int resp_freq;
     int valid;
     int resp_type;
     double ratio;
     Date dataDate;
 
-    public SensorData(int id, String clientId, int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int valid, int resp_type, double ratio, Date dataDate) {
+    public SensorData(int id, String clientId, int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int resp_freq, int valid, int resp_type, double ratio, Date dataDate) {
         this.id = id;
         this.clientId = clientId;
         this.temperature = temperature;
@@ -26,6 +27,7 @@ public class SensorData {
         this.tvoc = tvoc;
         this.temp_freq = temp_freq;
         this.mic_freq = mic_freq;
+        this.resp_freq = resp_freq;
         this.valid = valid;
         this.resp_type = resp_type;
         this.ratio = ratio;
@@ -120,6 +122,14 @@ public class SensorData {
         this.dataDate = dataDate;
     }
 
+    public int getResp_freq() {
+        return resp_freq;
+    }
+
+    public void setResp_freq(int resp_freq) {
+        this.resp_freq = resp_freq;
+    }
+
     @Override
     public String toString() {
         return "SensorData{" +
@@ -130,6 +140,7 @@ public class SensorData {
                 ", tvoc=" + tvoc +
                 ", temp_freq=" + temp_freq +
                 ", mic_freq=" + mic_freq +
+                ", resp_freq=" + resp_freq +
                 ", valid=" + valid +
                 ", resp_type=" + resp_type +
                 ", ratio=" + ratio +
