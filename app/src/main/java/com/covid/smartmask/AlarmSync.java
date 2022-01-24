@@ -38,29 +38,29 @@ public class AlarmSync extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        sync= settings.getBoolean("syncData", false);
+        sync = settings.getBoolean("syncData", false);
         dbURL = settings.getString("syncURL", "");
         androidId = Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        Log.d("Syncing",sync + " " + dbURL);
+        Log.d("Syncing", sync + " " + dbURL);
         resetRetrofitBuilder();
         consoleDatabase(context);
     }
 
-    private void resetRetrofitBuilder(){
+    private void resetRetrofitBuilder() {
         try {
             retrofit = new Retrofit.Builder()
                     .baseUrl(dbURL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-        }catch (Exception e){
-            Log.e("Retrofit",e.toString());
+        } catch (Exception e) {
+            Log.e("Retrofit", e.toString());
         }
     }
 
     @SuppressLint("Range")
-    private void consoleDatabase(Context context){
-        Runnable runnable = new Runnable(){
+    private void consoleDatabase(Context context) {
+        Runnable runnable = new Runnable() {
             public void run() {
                 try {
                     PostRequestAPI postRequestAPI = retrofit.create(PostRequestAPI.class);
@@ -70,71 +70,71 @@ public class AlarmSync extends BroadcastReceiver {
                     String formattedList;
                     List<Integer> syncedSensorList = new ArrayList<Integer>();
                     dbData = new DbData(context);
-                    c = dbData.getReadableDatabase().rawQuery("SELECT * FROM "+DbHelper.TABLE_SENSOR + " WHERE synced = 0", null);
+                    c = dbData.getReadableDatabase().rawQuery("SELECT * FROM " + DbHelper.TABLE_SENSOR + " WHERE synced = 0", null);
 
-                    if (c.moveToFirst()){
+                    if (c.moveToFirst()) {
                         do {
                             try {
-                                cursorDate = formatter.parse(c.getString(10)+"");
-                                SensorData sensorData = new SensorData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),c.getInt(3),c.getInt(4),c.getInt(5),c.getInt(6),c.getInt(7),c.getInt(8),c.getDouble(9),cursorDate);
+                                cursorDate = formatter.parse(c.getString(10) + "");
+                                SensorData sensorData = new SensorData(c.getInt(0), androidId, c.getInt(1), c.getInt(2), c.getInt(3), c.getInt(4), c.getInt(5), c.getInt(6), c.getInt(7), c.getInt(8), c.getDouble(9), cursorDate);
                                 Call<SensorData> sensorCall = postRequestAPI.PostSensorData(sensorData);
                                 sensorCall.enqueue(new Callback<SensorData>() {
                                     @Override
                                     public void onResponse(Call<SensorData> call, Response<SensorData> response) {
-                                        Log.d("CRUD","Synced Sensor Data");
+                                        Log.d("CRUD", "Synced Sensor Data");
                                         syncedSensorList.add(sensorData.getId());
                                     }
 
                                     @Override
                                     public void onFailure(Call<SensorData> call, Throwable t) {
-                                        Log.d("CRUD","Failed Sync Oximeter Data");
+                                        Log.d("CRUD", "Failed Sync Oximeter Data");
                                     }
                                 });
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                        } while(c.moveToNext());
+                        } while (c.moveToNext());
                     }
                     c.close();
-                    formattedList = syncedSensorList.toString().replace("[","(").replace("]",")");
-                    for(Integer id: syncedSensorList) {
+                    formattedList = syncedSensorList.toString().replace("[", "(").replace("]", ")");
+                    for (Integer id : syncedSensorList) {
                         dbData.getWritableDatabase().execSQL("UPDATE " + DbHelper.TABLE_SENSOR + " SET synced = 1 WHERE id in " + formattedList);
                     }
                     dbData.close();
 
                     dbData = new DbData(context);
                     List<Integer> syncedOxiList = new ArrayList<Integer>();
-                    c = dbData.getReadableDatabase().rawQuery("SELECT * FROM "+DbHelper.TABLE_OXI + " WHERE synced = 0", null);
-                    if (c.moveToFirst()){
+                    c = dbData.getReadableDatabase().rawQuery("SELECT * FROM " + DbHelper.TABLE_OXI + " WHERE synced = 0", null);
+                    if (c.moveToFirst()) {
                         do {
                             try {
-                                cursorDate = formatter.parse(c.getString(3)+"");
-                                OximeterData oxiData = new OximeterData(c.getInt(0),androidId,c.getInt(1),c.getInt(2),cursorDate);
+                                cursorDate = formatter.parse(c.getString(3) + "");
+                                OximeterData oxiData = new OximeterData(c.getInt(0), androidId, c.getInt(1), c.getInt(2), cursorDate);
                                 Call<OximeterData> sensorCall = postRequestAPI.PostOximeterData(oxiData);
                                 sensorCall.enqueue(new Callback<OximeterData>() {
                                     @Override
                                     public void onResponse(Call<OximeterData> call, Response<OximeterData> response) {
-                                        Log.d("CRUD","Synced Oximeter Data");
+                                        Log.d("CRUD", "Synced Oximeter Data");
                                         syncedOxiList.add(oxiData.getId());
                                     }
 
                                     @Override
                                     public void onFailure(Call<OximeterData> call, Throwable t) {
-                                        Log.d("CRUD","Failed Sync Oximeter Data");
-                                        Log.e("CRUD",""+t.getCause());
+                                        Log.d("CRUD", "Failed Sync Oximeter Data");
+                                        Log.e("CRUD", "" + t.getCause());
                                     }
                                 });
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                        } while(c.moveToNext());
+                        } while (c.moveToNext());
                     }
                     c.close();
-                    formattedList = syncedOxiList.toString().replace("[","(").replace("]",")");
-                    dbData.getWritableDatabase().execSQL("UPDATE "+ DbHelper.TABLE_OXI+" SET synced = 1 WHERE id in "+formattedList);
+                    formattedList = syncedOxiList.toString().replace("[", "(").replace("]", ")");
+                    dbData.getWritableDatabase().execSQL("UPDATE " + DbHelper.TABLE_OXI + " SET synced = 1 WHERE id in " + formattedList);
                     dbData.close();
-                }catch (Exception e){
-                    Log.e("Retrofit",e.toString());
+                } catch (Exception e) {
+                    Log.e("Retrofit", e.toString());
                 }
             }
         };

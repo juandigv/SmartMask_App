@@ -24,7 +24,7 @@ public class DialogSync extends AppCompatDialogFragment {
     private EditText editUrl;
     private Switch switchSync;
     private DialogSyncListener listener;
-    private final String[] schemes = {"http","https"};
+    private final String[] schemes = {"http", "https"};
 
 
     @Override

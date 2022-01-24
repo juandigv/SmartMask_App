@@ -15,8 +15,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView2"
@@ -48,162 +47,174 @@
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center"
             android:text="Tiempo Restante:"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="60dp"
-            />
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/textActTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="05:00"
             android:textSize="48sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_marginLeft="12dp"
-        >
-            <TextView
-                android:id="@+id/textFTempLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Frec. Temperatura:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textFMicLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Frec. Micrófono:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textFRespLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Frec. Resp.:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textValidLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Validez:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textTRespLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tipo Respiración:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textRatioLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ratio: "
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textTVOCLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TVOC:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/textCO2Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CO2:"
-                android:textAlignment="textEnd"
-                android:textSize="20sp"/>
-    </LinearLayout>
-
+            android:textStyle="bold" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_marginTop="48dp"
             android:gravity="center"
-            android:layout_margin="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            >
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textFTemp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NaN"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textFMic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NaN"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textFResp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NaN"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textValid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Undefined"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textTResp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Undefined"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textRatio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1:NaN"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textTVOC"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NaN ppb"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        <TextView
-            android:id="@+id/textCO2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NaN ppm"
-            android:textAlignment="textStart"
-            android:textSize="20sp"/>
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textFTempLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Frec. Temperatura:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textFMicLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Frec. Micrófono:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textFRespLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Frec. Resp.:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textValidLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Validez:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textTRespLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo Respiración:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textRatioLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ratio: "
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textTVOCLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TVOC:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textCO2Label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CO2:"
+                    android:textAlignment="textEnd"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textFTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NaN"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textFMic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NaN"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textFResp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NaN"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textValid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Undefined"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textTResp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Undefined"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textRatio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1:NaN"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textTVOC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NaN ppb"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textCO2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NaN ppm"
+                    android:textAlignment="textStart"
+                    android:textSize="20sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -214,8 +225,7 @@
         android:layout_width="match_parent"
         android:layout_height="96dp"
         android:text="Iniciar Actividad"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabActOxi"

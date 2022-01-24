@@ -25,14 +25,14 @@ public class AlarmReciever extends BroadcastReceiver {
         Intent i = new Intent(context, ExerciseActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra("Notification", true);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, 0);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        long[] pattern = {500,500,500,500,500,500,500,500,500};
+        long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .build();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"smartmaskExercise")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "smartmaskExercise")
                 .setSmallIcon(R.drawable.facemaskicon)
                 .setContentTitle("Smart Mask Activity")
                 .setContentText("Ingrese a la aplicación para tomar medidas")
@@ -49,8 +49,8 @@ public class AlarmReciever extends BroadcastReceiver {
                 .setVibrate(pattern);
 
 
-        NotificationManagerCompat notificationManagerCompat =  NotificationManagerCompat.from(context);
-        notificationManagerCompat.notify(1,builder.build());
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+        notificationManagerCompat.notify(1, builder.build());
 
     }
 }

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
-public class DbData extends DbHelper{
+public class DbData extends DbHelper {
 
     Context context;
 
@@ -15,7 +15,7 @@ public class DbData extends DbHelper{
         this.context = context;
     }
 
-    public long insertDataSensor(int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int resp_freq, int valid, int resp_type, float ratio){
+    public long insertDataSensor(int temperature, int co2, int tvoc, int temp_freq, int mic_freq, int resp_freq, int valid, int resp_type, float ratio) {
         long id = 0;
 
         try {
@@ -34,12 +34,13 @@ public class DbData extends DbHelper{
             values.put("ratio", ratio);
             id = db.insert(TABLE_SENSOR, null, values);
             db.close();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.toString();
         }
         return id;
     }
-    public long insertDataOxi(int oxigen, int heart){
+
+    public long insertDataOxi(int oxigen, int heart) {
         long id = 0;
 
         try {
@@ -51,7 +52,7 @@ public class DbData extends DbHelper{
             values.put("heartRate", heart);
             id = db.insert(TABLE_OXI, null, values);
             db.close();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.toString();
         }
         return id;

@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    >
+    android:padding="16dp">
 
     <EditText
         android:id="@+id/editUrl"
@@ -30,12 +29,11 @@
         android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/switchSync"
+        android:gravity="center"
         android:text="Nota: Los datos se sincronizan cada 30 minutos"
         android:textSize="12sp"
-        android:textStyle="italic"
-        android:gravity="center"
-        android:layout_below="@+id/switchSync"
-        />
+        android:textStyle="italic" />
 
 
 </RelativeLayout>

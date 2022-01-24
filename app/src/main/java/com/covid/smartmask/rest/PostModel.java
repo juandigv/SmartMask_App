@@ -13,7 +13,7 @@ public class PostModel {
     OximeterData oximeterData;
 
 
-    public PostModel(String title, String bodyPost){
+    public PostModel(String title, String bodyPost) {
         this.title = title;
         this.bodyPost = bodyPost;
     }
@@ -29,6 +29,7 @@ public class PostModel {
     public SensorData getSensorDataData() {
         return sensorData;
     }
+
     public OximeterData getOximeterData() {
         return oximeterData;
     }

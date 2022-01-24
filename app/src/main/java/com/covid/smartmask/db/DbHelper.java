@@ -13,7 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static DbHelper mInstance = null;
     private static final int DATABASE_VERSION = 7;
-    private static  final String DATABASE_NAME = "smartmask.db";
+    private static final String DATABASE_NAME = "smartmask.db";
     public static final String TABLE_SENSOR = "t_smsensor";
     public static final String TABLE_OXI = "t_smoxi";
 
@@ -55,8 +55,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_SENSOR);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+ TABLE_OXI);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_SENSOR);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_OXI);
         onCreate(sqLiteDatabase);
     }
 

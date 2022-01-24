@@ -63,7 +63,7 @@ public class DialogTimer extends AppCompatDialogFragment {
         number_picker_min.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int i) {
-                return String.format("%02d",i);
+                return String.format("%02d", i);
             }
         });
         number_picker_seg.setFormatter(new NumberPicker.Formatter() {

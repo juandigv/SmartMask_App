@@ -30,7 +30,7 @@ public class DialogOximetro extends AppCompatDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -57,7 +57,7 @@ public class DialogOximetro extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public interface DialogOximetroListener{
+    public interface DialogOximetroListener {
         void saveValues(String oxigen, String heart);
     }
 }

@@ -9,20 +9,19 @@
         android:id="@+id/edit_oxigen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:hint="Saturación de Oxigeno (%SpO2)"
-        tools:layout_editor_absoluteY="31dp"
+        android:inputType="number"
         android:maxLength="3"
-        />
+        tools:layout_editor_absoluteY="31dp" />
 
     <EditText
         android:id="@+id/edit_heart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Ritmo Cardiaco (PRbpm)"
         android:layout_below="@+id/edit_oxigen"
         android:layout_alignParentStart="true"
-        android:maxLength="3"/>
+        android:hint="Ritmo Cardiaco (PRbpm)"
+        android:inputType="number"
+        android:maxLength="3" />
 
 </RelativeLayout>

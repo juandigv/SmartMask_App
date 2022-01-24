@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.covid.smartmask.db.DbData;
 import com.covid.smartmask.db.DbHelper;
 import com.covid.smartmask.dialog.DialogActivities;
@@ -51,9 +52,10 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener, DialogSync.DialogSyncListener{
+public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener, DialogSync.DialogSyncListener {
 
     private TextView textBtName;
     private TextView textBtAddress;
@@ -101,17 +103,17 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         createNotificationChannelExercise();
         createNotificationChannelWarning();
 
-        DbHelper dbHelper =  DbHelper.getInstance(MainActivity.this);
+        DbHelper dbHelper = DbHelper.getInstance(MainActivity.this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 
-        if(db != null){
-           // Toast.makeText(MainActivity.this, "DB Created",Toast.LENGTH_LONG).show();
-           Log.d("Database","DB was Created");
+        if (db != null) {
+            // Toast.makeText(MainActivity.this, "DB Created",Toast.LENGTH_LONG).show();
+            Log.d("Database", "DB was Created");
 
-        }else {
-            Log.d("Database","DB Creation Failed");
-            Toast.makeText(MainActivity.this, "DB Creation Failed",Toast.LENGTH_LONG).show();
+        } else {
+            Log.d("Database", "DB Creation Failed");
+            Toast.makeText(MainActivity.this, "DB Creation Failed", Toast.LENGTH_LONG).show();
             if (Build.VERSION.SDK_INT >= 21) {
                 finishAndRemoveTask();
             } else {
@@ -135,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         phoneVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         initializeChart();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        setSyncValues(settings.getString("syncURL", ""),settings.getBoolean("syncData", false));
+        setSyncValues(settings.getString("syncURL", ""), settings.getBoolean("syncData", false));
 
 
         btnActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,ExerciseActivity.class);
+                Intent i = new Intent(MainActivity.this, ExerciseActivity.class);
                 startActivity(i);
             }
         });
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             @Override
             public void onClick(View view) {
                 DialogTimer dialogTimer = new DialogTimer();
-                dialogTimer.show(getSupportFragmentManager(),"Timer");
+                dialogTimer.show(getSupportFragmentManager(), "Timer");
             }
         });
         btnActivity.setOnLongClickListener(new View.OnLongClickListener() {
@@ -160,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                 int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
                 int calendarEndHour = settings.getInt("calendarEndHour", -1);
                 int calendarEndMinute = settings.getInt("calendarEndMinute", -1);
-                DialogActivities dialogActivities= new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
-                dialogActivities.show(getSupportFragmentManager(),"Horas de Actividades");
+                DialogActivities dialogActivities = new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
+                dialogActivities.show(getSupportFragmentManager(), "Horas de Actividades");
                 return true;
             }
         });
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     }
 
     private void createNotificationChannelExercise() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "SmartMaskReminderChannel";
             String description = "Channel for Mask Alarm Exercises";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -190,11 +192,11 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
-            NotificationChannel channel = new NotificationChannel("smartmaskExercise",name,importance);
+            NotificationChannel channel = new NotificationChannel("smartmaskExercise", name, importance);
             channel.setDescription(description);
             channel.enableVibration(true);
             channel.enableLights(true);
-            channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,audioAttributes);
+            channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, audioAttributes);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
@@ -202,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     }
 
     private void createNotificationChannelWarning() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "SmartMaskWarningChannel";
             String description = "Channel for Mask Alarm Warnings";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -210,35 +212,35 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .build();
-            NotificationChannel channel = new NotificationChannel("smartmaskWarning",name,importance);
+            NotificationChannel channel = new NotificationChannel("smartmaskWarning", name, importance);
             channel.setDescription(description);
             channel.enableVibration(true);
             channel.enableLights(true);
-            channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI,audioAttributes);
+            channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, audioAttributes);
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
-    public void showRemoveMaskDialog(){
+    public void showRemoveMaskDialog() {
         long[] pattern = {0, 500, 500, 500, 1000, 500, 500, 500};
         phoneVibrator.vibrate(pattern, -1);
-        DialogWarning dialogWarning= new DialogWarning();
-        dialogWarning.show(getSupportFragmentManager(),"Remover Máscara");
+        DialogWarning dialogWarning = new DialogWarning();
+        dialogWarning.show(getSupportFragmentManager(), "Remover Máscara");
     }
 
-    private void showOxigenDialog(){
+    private void showOxigenDialog() {
         DialogOximetro dialogOximetro = new DialogOximetro();
-        dialogOximetro.show(getSupportFragmentManager(),"Oximetro");
+        dialogOximetro.show(getSupportFragmentManager(), "Oximetro");
     }
 
-    private void showSyncDialog(){
+    private void showSyncDialog() {
         DialogSync dialogSync = new DialogSync();
-        dialogSync.show(getSupportFragmentManager(),"Data Sync");
+        dialogSync.show(getSupportFragmentManager(), "Data Sync");
     }
 
-    private void initializeChart(){
+    private void initializeChart() {
 
         chartData.getDescription().setEnabled(true);
         chartData.getDescription().setText("Smart Mask Data Plot");
@@ -277,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
 
     }
 
-    private LineDataSet createSet(String label, int color){
+    private LineDataSet createSet(String label, int color) {
         LineDataSet set = new LineDataSet(null, label);
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setLineWidth(3f);
@@ -293,17 +295,17 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     @Override
     public void saveValues(String oxigen, String heart) {
 
-        if(!(oxigen.isEmpty() || heart.isEmpty())){
+        if (!(oxigen.isEmpty() || heart.isEmpty())) {
             dbData = new DbData(getApplicationContext());
             long id = dbData.insertDataOxi(Integer.parseInt(oxigen), Integer.parseInt(heart));
             dbData.close();
-            if(id > 0){
-                Log.d("Database Main","Data succesfully Added");
+            if (id > 0) {
+                Log.d("Database Main", "Data succesfully Added");
                 Toast.makeText(getBaseContext(), "Información de Oximetro añadida con éxito", Toast.LENGTH_SHORT).show();
-            }else{
-                Log.d("Database Main","Failure Saving Data");
+            } else {
+                Log.d("Database Main", "Failure Saving Data");
             }
-        }else{
+        } else {
             Toast.makeText(getBaseContext(), "Datos no pueden estar vacios, intente nuevamente", Toast.LENGTH_LONG).show();
         }
 
@@ -313,15 +315,15 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     public void updateTempTimer(int newMillisTime) {
         temp_msg_time = newMillisTime;
         Toast.makeText(getBaseContext(), "Se ha cambiado el tiempo para los datos de temperatura", Toast.LENGTH_LONG).show();
-        String jsonString = String.format("{\"timeInterval\":%d}",temp_msg_time);
+        String jsonString = String.format("{\"timeInterval\":%d}", temp_msg_time);
         BtMsgService.sendBtMessage(jsonString);
     }
 
     @Override
     public void saveActivityHours(TimePicker time_start, TimePicker time_end) {
 
-        int start = (time_start.getHour()*60) +time_start.getMinute();
-        int end = (time_end.getHour() *60)+time_end.getMinute();
+        int start = (time_start.getHour() * 60) + time_start.getMinute();
+        int end = (time_end.getHour() * 60) + time_end.getMinute();
 
         int difference = end - start;
         if (difference == 0 || difference < 0) {
@@ -331,10 +333,9 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
             int calendarEndHour = settings.getInt("calendarEndHour", -1);
             int calendarEndMinute = settings.getInt("calendarEndMinute", -1);
-            DialogActivities dialogActivities= new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
-            dialogActivities.show(getSupportFragmentManager(),"Horas de Actividades");
-        }
-        else {
+            DialogActivities dialogActivities = new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
+            dialogActivities.show(getSupportFragmentManager(), "Horas de Actividades");
+        } else {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt("calendarStartHour", time_start.getHour());
@@ -342,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             editor.putInt("calendarEndHour", time_end.getHour());
             editor.putInt("calendarEndMinute", time_end.getMinute());
             editor.commit();
-            setExerciseAlarms(true,time_start.getHour(),time_start.getMinute(),time_end.getHour(),time_end.getMinute());
+            setExerciseAlarms(true, time_start.getHour(), time_start.getMinute(), time_end.getHour(), time_end.getMinute());
         }
     }
 
@@ -353,57 +354,57 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         editor.putBoolean("syncData", sync);
         editor.putString("syncURL", url);
         editor.commit();
-        if(sync && !url.isEmpty()){
-            if(alarmManager == null){
+        if (sync && !url.isEmpty()) {
+            if (alarmManager == null) {
                 alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             }
             Intent intent = new Intent(this, AlarmSync.class);
-            PendingIntent pendingIntent  = PendingIntent.getBroadcast(this,115,intent,0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 115, intent, 0);
             Toast.makeText(getBaseContext(), "Sincronización Activa", Toast.LENGTH_LONG).show();
-            alarmManager.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent );
+            alarmManager.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
         }
     }
 
-    public void setExerciseAlarms(boolean showToasts, int calendarStartHour, int calendarStartMinute, int calendarEndHour, int calendarEndMinute){
-        int start = (calendarStartHour*60) +calendarStartMinute;
-        int end = (calendarEndHour *60)+calendarEndMinute;
-        if(alarmManager == null){
+    public void setExerciseAlarms(boolean showToasts, int calendarStartHour, int calendarStartMinute, int calendarEndHour, int calendarEndMinute) {
+        int start = (calendarStartHour * 60) + calendarStartMinute;
+        int end = (calendarEndHour * 60) + calendarEndMinute;
+        if (alarmManager == null) {
             alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         }
         int numberOfAlarms = 0;
-        for(int i = start; i<=end;i=i+180){
+        for (int i = start; i <= end; i = i + 180) {
             numberOfAlarms++;
         }
         calendarStart = Calendar.getInstance();
-        calendarStart.set(Calendar.HOUR_OF_DAY,calendarStartHour);
+        calendarStart.set(Calendar.HOUR_OF_DAY, calendarStartHour);
         calendarStart.set(Calendar.MINUTE, calendarStartMinute);
         calendarStart.set(Calendar.SECOND, 0);
         calendarStart.set(Calendar.MILLISECOND, 0);
         Intent intent = new Intent(this, AlarmReciever.class);
-        for(int i = 0;i<=8;i++){
-            pendingIntent = PendingIntent.getBroadcast(this,i,intent,0);
+        for (int i = 0; i <= 8; i++) {
+            pendingIntent = PendingIntent.getBroadcast(this, i, intent, 0);
             alarmManager.cancel(pendingIntent);
         }
-        Toast.makeText(getBaseContext(), String.format("Total Alarmas: %d",numberOfAlarms), Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), String.format("Total Alarmas: %d", numberOfAlarms), Toast.LENGTH_LONG).show();
 
-        for(int i = 0; i< numberOfAlarms; i++){
+        for (int i = 0; i < numberOfAlarms; i++) {
             calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY,calendarStartHour+(3*i));
+            calendar.set(Calendar.HOUR_OF_DAY, calendarStartHour + (3 * i));
             calendar.set(Calendar.MINUTE, calendarStartMinute);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
-            pendingIntent = PendingIntent.getBroadcast(this,i,intent,0);
+            pendingIntent = PendingIntent.getBroadcast(this, i, intent, 0);
 
-            Log.d("Calendar","Setting Up Alarms");
-            if(Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis() < 0){
-                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
-                        AlarmManager.INTERVAL_DAY,pendingIntent);
-                if(showToasts){
-                    Toast.makeText(getBaseContext(), String.format("Activando alarma para %02d:%02d",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
+            Log.d("Calendar", "Setting Up Alarms");
+            if (Calendar.getInstance().getTimeInMillis() - calendar.getTimeInMillis() < 0) {
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                        AlarmManager.INTERVAL_DAY, pendingIntent);
+                if (showToasts) {
+                    Toast.makeText(getBaseContext(), String.format("Activando alarma para %02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
                 }
-              }else{
-                if(showToasts){
-                    Toast.makeText(getBaseContext(), String.format("Activando alarma atrasada para %02d:%02d",calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
+            } else {
+                if (showToasts) {
+                    Toast.makeText(getBaseContext(), String.format("Activando alarma atrasada para %02d:%02d", calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -420,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
 
         textBtName.setText(BtName);
         textBtAddress.setText(BtAddress);
-        if(!mBounded) {
+        if (!mBounded) {
             mConnection = new ServiceConnection() {
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
@@ -504,11 +505,11 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
         int calendarEndHour = settings.getInt("calendarEndHour", -1);
         int calendarEndMinute = settings.getInt("calendarEndMinute", -1);
-        Log.d("SharedPreferences",calendarStartHour+"");
-        if(calendarStartHour == -1){
-            DialogActivities dialogActivities= new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
-            dialogActivities.show(getSupportFragmentManager(),"Horas de Actividades");
-        }else{
+        Log.d("SharedPreferences", calendarStartHour + "");
+        if (calendarStartHour == -1) {
+            DialogActivities dialogActivities = new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
+            dialogActivities.show(getSupportFragmentManager(), "Horas de Actividades");
+        } else {
             setExerciseAlarms(false, calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
         }
     }
@@ -516,17 +517,19 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBounded) {
-            Log.d("BTBind","Unbinded");
+        if (mBounded) {
+            Log.d("BTBind", "Unbinded");
             unbindService(mConnection);
             mBounded = false;
         }
-    };
+    }
 
-    private void addEntry(int value, int setNumber){
+    ;
+
+    private void addEntry(int value, int setNumber) {
         LineData data = chartData.getData();
 
-        if(data != null){
+        if (data != null) {
 
             ILineDataSet set0 = data.getDataSetByIndex(0);
             ILineDataSet set1 = data.getDataSetByIndex(1);
@@ -546,15 +549,15 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             }
 
 
-            switch (setNumber){
+            switch (setNumber) {
                 case 0:
-                    data.addEntry(new Entry(set0.getEntryCount(), (int) value),0);
+                    data.addEntry(new Entry(set0.getEntryCount(), (int) value), 0);
                     break;
                 case 1:
-                    data.addEntry(new Entry(set1.getEntryCount(), (int) (value/10)),1);
+                    data.addEntry(new Entry(set1.getEntryCount(), (int) (value / 10)), 1);
                     break;
                 case 2:
-                    data.addEntry(new Entry(set2.getEntryCount(), (int) value),2);
+                    data.addEntry(new Entry(set2.getEntryCount(), (int) value), 2);
                     break;
             }
             data.notifyDataChanged();
@@ -565,10 +568,10 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         }
     }
 
-    public boolean IsBTServiceRunning(){
+    public boolean IsBTServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)){
-            if(BluetoothMessageService.class.getName().equals(service.service.getClassName())){
+        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (BluetoothMessageService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -576,7 +579,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     }
 
     @Override
-    public void onBackPressed () {
-      //
+    public void onBackPressed() {
+        //
     }
 }

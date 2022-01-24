@@ -18,7 +18,7 @@ public class AlarmWarningReciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)

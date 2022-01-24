@@ -15,8 +15,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/textView2"
@@ -70,11 +69,10 @@
             android:textSize="20dp" />
 
         <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartData"
             android:layout_width="match_parent"
             android:layout_height="280dp"
-            android:id="@+id/chartData"
-            android:layout_marginTop="64dp"
-            />
+            android:layout_marginTop="64dp" />
 
 
     </LinearLayout>
@@ -84,16 +82,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Realizar Ejercicios"
-        app:layout_constraintBottom_toTopOf="@+id/btnMsg"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/btnMsg" />
 
     <Button
         android:id="@+id/btnMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Configurar Mensajes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabOxi"

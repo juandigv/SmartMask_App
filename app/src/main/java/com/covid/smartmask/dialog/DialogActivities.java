@@ -87,7 +87,7 @@ public class DialogActivities extends AppCompatDialogFragment {
                         return true;
                     }
                 }
-                return  false;
+                return false;
             }
         });
         return builder.create();
