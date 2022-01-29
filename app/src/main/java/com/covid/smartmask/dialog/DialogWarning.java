@@ -11,11 +11,13 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
+import java.util.Objects;
+
 public class DialogWarning extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_remove, null);

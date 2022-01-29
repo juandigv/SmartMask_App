@@ -35,6 +35,7 @@ public class AlarmSync extends BroadcastReceiver {
     private DbData dbData;
     private String androidId;
 
+    @SuppressLint("HardwareIds")
     @Override
     public void onReceive(Context context, Intent intent) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -64,11 +65,11 @@ public class AlarmSync extends BroadcastReceiver {
             public void run() {
                 try {
                     PostRequestAPI postRequestAPI = retrofit.create(PostRequestAPI.class);
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     Cursor c;
                     Date cursorDate;
                     String formattedList;
-                    List<Integer> syncedSensorList = new ArrayList<Integer>();
+                    List<Integer> syncedSensorList = new ArrayList<>();
                     dbData = new DbData(context);
                     c = dbData.getReadableDatabase().rawQuery("SELECT * FROM " + DbHelper.TABLE_SENSOR + " WHERE synced = 0", null);
 
@@ -97,9 +98,9 @@ public class AlarmSync extends BroadcastReceiver {
                     }
                     c.close();
                     formattedList = syncedSensorList.toString().replace("[", "(").replace("]", ")");
-                    for (Integer id : syncedSensorList) {
-                        dbData.getWritableDatabase().execSQL("UPDATE " + DbHelper.TABLE_SENSOR + " SET synced = 1 WHERE id in " + formattedList);
-                    }
+
+                    dbData.getWritableDatabase().execSQL("UPDATE " + DbHelper.TABLE_SENSOR + " SET synced = 1 WHERE id in " + formattedList);
+
                     dbData.close();
 
                     dbData = new DbData(context);

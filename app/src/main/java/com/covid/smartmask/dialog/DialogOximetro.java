@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
+import java.util.Objects;
+
 public class DialogOximetro extends AppCompatDialogFragment {
     private EditText edit_oxigen;
     private EditText edit_heart;
@@ -31,7 +33,7 @@ public class DialogOximetro extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_oximeter, null);

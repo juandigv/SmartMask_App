@@ -3,6 +3,7 @@ package com.covid.smartmask;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -58,10 +59,10 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     Intent btServiceIntent;
 
     private final long[] pattern1 = {0, 1000, 500, 1000, 500};
-    private final long[] pattern2 = {0, 500, 500, 500, 1000, 500, 500, 500};
-    private final String[] validDict = {"Concuerdan","Variación","Sin Concordancia"};
-    private final String[] trepDict = {"Eupnea","Taquipnea","Bradipnea","Apnea"};
+    private final String[] validDict = {"Concuerdan", "Variación", "Sin Concordancia"};
+    private final String[] trepDict = {"Eupnea", "Taquipnea", "Bradipnea", "Apnea"};
 
+    @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,12 +90,12 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 
-        if(db != null){
+        if (db != null) {
             // Toast.makeText(MainActivity.this, "DB Created",Toast.LENGTH_LONG).show();
-            Log.d("Database Exercise","Database Created");
-        }else {
-            Log.d("Database Exercise","Database Failure");
-            Toast.makeText(ExerciseActivity.this, "DB Creation Failed",Toast.LENGTH_LONG).show();
+            Log.d("Database Exercise", "Database Created");
+        } else {
+            Log.d("Database Exercise", "Database Failure");
+            Toast.makeText(ExerciseActivity.this, "DB Creation Failed", Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -113,19 +114,21 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
             }
         });
     }
+
     private void startExerciseTimer() {
         btnStart.setEnabled(false);
         inExercise = true;
         new CountDownTimer(300000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                int seconds = (int)Math.floor(millisUntilFinished/1000);
-                int minutes = (int)Math.floor(seconds/60);
-                textActTime.setText( String.format("%02d:%02d",minutes,seconds-(minutes*60)));
-                if(seconds % (secondsUntilMessage) == 0){
+                int seconds = (int) Math.floor(millisUntilFinished / 1000);
+                int minutes = (int) Math.floor(seconds / 60);
+                textActTime.setText(String.format("%02d:%02d", minutes, seconds - (minutes * 60)));
+                if (seconds % (secondsUntilMessage) == 0) {
                     BtMsgService.sendBtMessage("{\"check\":1}");
                 }
             }
+
             public void onFinish() {
                 textActTime.setText("Completado!");
                 phoneVibrator.vibrate(pattern1, -1);
@@ -140,47 +143,47 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
         }.start();
     }
 
-    public void showRemoveMaskDialog(){
+    public void showRemoveMaskDialog() {
         long[] pattern = {0, 500, 500, 500, 1000, 500, 500, 500};
         phoneVibrator.vibrate(pattern, -1);
-        DialogWarning dialogWarning= new DialogWarning();
-        dialogWarning.show(getSupportFragmentManager(),"Remover Máscara");
+        DialogWarning dialogWarning = new DialogWarning();
+        dialogWarning.show(getSupportFragmentManager(), "Remover Máscara");
     }
 
-    private void showOxigenDialog(){
+    private void showOxigenDialog() {
         DialogOximetro dialogOximetro = new DialogOximetro();
-        dialogOximetro.show(getSupportFragmentManager(),"Oximetro");
+        dialogOximetro.show(getSupportFragmentManager(), "Oximetro");
     }
+
     @Override
     public void saveValues(String oxigen, String heart) {
 
-        if(!(oxigen.isEmpty() || heart.isEmpty())){
+        if (!(oxigen.isEmpty() || heart.isEmpty())) {
             dbData = new DbData(getApplicationContext());
             long id = dbData.insertDataOxi(Integer.parseInt(oxigen), Integer.parseInt(heart));
             dbData.close();
-            if(id > 0){
-                Log.d("Database","Data succesfully added");
+            if (id > 0) {
+                Log.d("Database", "Data succesfully added");
                 Toast.makeText(getBaseContext(), "Información de Oximetro añadida con éxito", Toast.LENGTH_SHORT).show();
-            }else{
-                Log.d("Database","Failure saving Data");
+            } else {
+                Log.d("Database", "Failure saving Data");
             }
-        }else{
+        } else {
             Toast.makeText(getBaseContext(), "Datos no pueden estar vacios, intente nuevamente", Toast.LENGTH_LONG).show();
         }
 
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
-        Log.d("Activity Exercise","Resumed");
+        Log.d("Activity Exercise", "Resumed");
 
         Intent intent = getIntent();
 
         exerciseDone = !(intent.getBooleanExtra("Notification", false));
 
-        if(!mBounded) {
+        if (!mBounded) {
             mConnection = new ServiceConnection() {
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
@@ -202,9 +205,9 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                         @Override
                         public void onChanged(Integer integer) {
                             if (inExercise) {
-                                textCO2.setText(integer.toString() + " ppm");
+                                textCO2.setText(String.format("%s ppm", integer.toString()));
                             }
-                            if (integer > settings.getInt("limit_CO2", 6500) ) {
+                            if (integer > settings.getInt("limit_CO2", 6500)) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -214,9 +217,9 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                         @Override
                         public void onChanged(Integer integer) {
                             if (inExercise) {
-                                textTVOC.setText(integer.toString() + " ppb");
+                                textTVOC.setText(String.format("%s ppb", integer.toString()));
                             }
-                            if (integer > settings.getInt("limit_TVOC", 800) ) {
+                            if (integer > settings.getInt("limit_TVOC", 800)) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -329,18 +332,20 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     @Override
     protected void onStop() {
         super.onStop();
-        if(mBounded) {
-            Log.d("BTBound Exercise","Unbounded");
+        if (mBounded) {
+            Log.d("BTBound Exercise", "Unbounded");
             unbindService(mConnection);
             mBounded = false;
         }
-    };
+    }
+
+    ;
 
 
-    public boolean IsBTServiceRunning(){
+    public boolean IsBTServiceRunning() {
         ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for(ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)){
-            if(BluetoothMessageService.class.getName().equals(service.service.getClassName())){
+        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+            if (BluetoothMessageService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -348,10 +353,10 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     }
 
     @Override
-    public void onBackPressed () {
-        if(!exerciseDone){
-            Toast.makeText(ExerciseActivity.this, "No puedes irte, aún no realizaste tus ejercicios",Toast.LENGTH_LONG).show();
-        }else{
+    public void onBackPressed() {
+        if (!exerciseDone) {
+            Toast.makeText(ExerciseActivity.this, "No puedes irte, aún no realizaste tus ejercicios", Toast.LENGTH_LONG).show();
+        } else {
             finish();
         }
     }

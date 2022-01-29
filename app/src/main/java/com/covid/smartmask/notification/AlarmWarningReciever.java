@@ -1,11 +1,9 @@
 package com.covid.smartmask.notification;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 
@@ -20,10 +18,6 @@ public class AlarmWarningReciever extends BroadcastReceiver {
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .setUsage(AudioAttributes.USAGE_ALARM)
-                .build();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "smartmaskWarning")
                 .setSmallIcon(R.drawable.facemaskicon)
                 .setContentTitle("Concentración de aire muy alto")

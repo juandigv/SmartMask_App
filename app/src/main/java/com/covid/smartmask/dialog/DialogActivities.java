@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,17 +15,17 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Objects;
+
 
 public class DialogActivities extends AppCompatDialogFragment {
     private TimePicker time_start;
     private TimePicker time_end;
     private DialogActivitiesListener listener;
-    private int startHour;
-    private int startMinute;
-    private int endHour;
-    private int endMinute;
+    private final int startHour;
+    private final int startMinute;
+    private final int endHour;
+    private final int endMinute;
 
     public DialogActivities(int startHour, int startMinute, int endHour, int endMinute) {
         this.startHour = startHour;
@@ -47,8 +45,8 @@ public class DialogActivities extends AppCompatDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_activities, null);
@@ -58,7 +56,7 @@ public class DialogActivities extends AppCompatDialogFragment {
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        listener.saveActivityHours(time_start,time_end);
+                        listener.saveActivityHours(time_start, time_end);
                     }
                 });
 
@@ -66,16 +64,16 @@ public class DialogActivities extends AppCompatDialogFragment {
         time_end = view.findViewById(R.id.time_end);
         time_start.setIs24HourView(true);
         time_end.setIs24HourView(true);
-        if(startHour != -1){
+        if (startHour != -1) {
             time_start.setHour(startHour);
         }
-        if(startMinute != -1){
+        if (startMinute != -1) {
             time_start.setMinute(startMinute);
         }
-        if(endHour != -1){
+        if (endHour != -1) {
             time_end.setHour(endHour);
         }
-        if(endMinute != -1){
+        if (endMinute != -1) {
             time_end.setMinute(endMinute);
         }
 
@@ -83,9 +81,7 @@ public class DialogActivities extends AppCompatDialogFragment {
             @Override
             public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (i == KeyEvent.KEYCODE_BACK) {
-                        return true;
-                    }
+                    return i == KeyEvent.KEYCODE_BACK;
                 }
                 return false;
             }
@@ -93,7 +89,7 @@ public class DialogActivities extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public interface DialogActivitiesListener{
+    public interface DialogActivitiesListener {
         void saveActivityHours(TimePicker time_start, TimePicker time_end);
     }
 

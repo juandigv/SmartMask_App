@@ -3,6 +3,7 @@ package com.covid.smartmask.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -35,7 +36,7 @@ public class DbData extends DbHelper {
             id = db.insert(TABLE_SENSOR, null, values);
             db.close();
         } catch (Exception ex) {
-            ex.toString();
+            Log.e("DbData Sensor", ex.toString());
         }
         return id;
     }
@@ -53,7 +54,7 @@ public class DbData extends DbHelper {
             id = db.insert(TABLE_OXI, null, values);
             db.close();
         } catch (Exception ex) {
-            ex.toString();
+            Log.e("DbData Oxi", ex.toString());
         }
         return id;
     }

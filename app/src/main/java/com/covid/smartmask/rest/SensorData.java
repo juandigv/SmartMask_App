@@ -1,7 +1,5 @@
 package com.covid.smartmask.rest;
 
-import androidx.annotation.Nullable;
-
 import java.util.Date;
 
 public class SensorData {

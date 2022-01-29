@@ -22,7 +22,6 @@ import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -384,8 +383,8 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         editor.putInt("limit_TVOC", limit_tvoc);
         editor.commit();
         Toast.makeText(getBaseContext(), "Limites Actualizados", Toast.LENGTH_LONG).show();
-        Log.d("SharedPreferences","CO2 :" + limit_co2);
-        Log.d("SharedPreferences","TVOC :" + limit_tvoc);
+        Log.d("SharedPreferences", "CO2 :" + limit_co2);
+        Log.d("SharedPreferences", "TVOC :" + limit_tvoc);
     }
 
     public void setExerciseAlarms(boolean showToasts, int calendarStartHour, int calendarStartMinute, int calendarEndHour, int calendarEndMinute) {
@@ -467,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                         public void onChanged(Integer integer) {
                             textCO2.setText(integer.toString() + " ppm (CO2)");
                             addEntry(integer, 1);
-                            if (integer > settings.getInt("limit_CO2", 6500) ) {
+                            if (integer > settings.getInt("limit_CO2", 6500)) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -478,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                         public void onChanged(Integer integer) {
                             textTVOC.setText(integer.toString() + " ppb (TVOC)");
                             addEntry(integer, 2);
-                            if (integer > settings.getInt("limit_TVOC", 800) ) {
+                            if (integer > settings.getInt("limit_TVOC", 800)) {
                                 showRemoveMaskDialog();
                             }
                         }

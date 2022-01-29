@@ -1,13 +1,11 @@
 package com.covid.smartmask.db;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
-
-import com.covid.smartmask.MainActivity;
 
 public class DbHelper extends SQLiteOpenHelper {
 
@@ -28,6 +26,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return mInstance;
     }
 
+    @SuppressLint("SQLiteString")
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_SENSOR + "(" +

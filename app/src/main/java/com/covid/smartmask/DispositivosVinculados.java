@@ -42,10 +42,8 @@ public class DispositivosVinculados extends AppCompatActivity {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
-        //---------------------------------------------------------------------
         VerificarEstadoBT();
         mPairedDevicesArrayAdapter = new ArrayAdapter(this, R.layout.dispositivos_encontrados);
         IdLista = (ListView) findViewById(R.id.IdLista);
@@ -54,51 +52,40 @@ public class DispositivosVinculados extends AppCompatActivity {
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         Set pairedDevices = mBtAdapter.getBondedDevices();
         BluetoothDevice device;
-        if (pairedDevices.size() > 0)
-        {
+        if (pairedDevices.size() > 0) {
             for (Object pairDevice : pairedDevices) {
                 device = (BluetoothDevice) pairDevice;
                 mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
         }
-        //---------------------------------------------------------------------
     }
 
-    // Configura un (on-click) para la lista
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView av, View v, int arg2, long arg3) {
-
-            // Obtener la dirección MAC del dispositivo
             String info = ((TextView) v).getText().toString().replaceAll("[\\n\\t ]", "");
-            String address = info.substring(info.length() - 17).replaceAll("[\\n\\t ]", "");;
-            String name = info.substring(0,info.length() - 17).replaceAll("[\\n\\t ]", "");;
+            String address = info.substring(info.length() - 17).replaceAll("[\\n\\t ]", "");
+            String name = info.substring(0, info.length() - 17).replaceAll("[\\n\\t ]", "");
 
-            if(name.equalsIgnoreCase("ESP32-FaceMask") ){
+            if (name.equalsIgnoreCase("ESP32-FaceMask")) {
                 finishAffinity();
-
-                // Realiza un intent para iniciar la siguiente actividad
                 Intent intend = new Intent(DispositivosVinculados.this, MainActivity.class);
                 intend.putExtra(EXTRA_DEVICE_NAME, name);
                 intend.putExtra(EXTRA_DEVICE_ADDRESS, address);
                 startActivity(intend);
-            }else{
-                Toast.makeText(DispositivosVinculados.this, "Este no es un dispositivo válido, intente con otro",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DispositivosVinculados.this, "Este no es un dispositivo válido, intente con otro", Toast.LENGTH_SHORT).show();
             }
-
-
-
         }
     };
 
     private void VerificarEstadoBT() {
-        mBtAdapter= BluetoothAdapter.getDefaultAdapter();
-        if(mBtAdapter==null) {
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBtAdapter == null) {
             Toast.makeText(getBaseContext(), "El dispositivo no soporta Bluetooth", Toast.LENGTH_SHORT).show();
         } else {
             if (mBtAdapter.isEnabled()) {
                 Log.d(TAG, "...Bluetooth Activado...");
             } else {
-                //Solicita al usuario que active Bluetooth
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, 1);
             }

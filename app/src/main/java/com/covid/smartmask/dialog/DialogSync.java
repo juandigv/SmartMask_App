@@ -20,12 +20,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
+import java.util.Objects;
+
 public class DialogSync extends AppCompatDialogFragment {
     private EditText editUrl;
     private Switch switchSync;
     private DialogSyncListener listener;
-    private final String[] schemes = {"http", "https"};
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -39,7 +39,7 @@ public class DialogSync extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_sync, null);
@@ -73,7 +73,7 @@ public class DialogSync extends AppCompatDialogFragment {
         switchSync = view.findViewById(R.id.switchSync);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        Boolean sync = settings.getBoolean("syncData", false);
+        boolean sync = settings.getBoolean("syncData", false);
         String url = settings.getString("syncURL", "");
 
         if (!url.isEmpty()) {
@@ -85,9 +85,7 @@ public class DialogSync extends AppCompatDialogFragment {
             @Override
             public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (i == KeyEvent.KEYCODE_BACK) {
-                        return true;
-                    }
+                    return i == KeyEvent.KEYCODE_BACK;
                 }
                 return false;
             }

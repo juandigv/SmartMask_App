@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
+import java.util.Objects;
+
 public class DialogTimer extends AppCompatDialogFragment {
     private NumberPicker number_picker_min;
     private NumberPicker number_picker_seg;
@@ -30,8 +32,8 @@ public class DialogTimer extends AppCompatDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_timer, null);
@@ -48,8 +50,8 @@ public class DialogTimer extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int minutes = number_picker_min.getValue();
-                        int seconds =  number_picker_seg.getValue();
-                        listener.updateTempTimer(((minutes * 60)+ seconds) * 1000);
+                        int seconds = number_picker_seg.getValue();
+                        listener.updateTempTimer(((minutes * 60) + seconds) * 1000);
                     }
                 });
 
@@ -69,14 +71,14 @@ public class DialogTimer extends AppCompatDialogFragment {
         number_picker_seg.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int i) {
-                return String.format("%02d",i);
+                return String.format("%02d", i);
             }
         });
 
         return builder.create();
     }
 
-    public interface DialogTimerListener{
+    public interface DialogTimerListener {
         void updateTempTimer(int newMillisTime);
     }
 }

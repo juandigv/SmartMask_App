@@ -17,6 +17,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.covid.smartmask.R;
 
+import java.util.Objects;
+
 public class DialogLimiter extends AppCompatDialogFragment {
     private EditText edit_limitCO2;
     private EditText edit_limitTVOC;
@@ -34,7 +36,7 @@ public class DialogLimiter extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_limiter, null);
@@ -51,14 +53,14 @@ public class DialogLimiter extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         int limit_co2;
                         int limit_tvoc;
-                        try{
+                        try {
                             limit_co2 = Integer.parseInt(edit_limitCO2.getText().toString());
-                        }catch (NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             limit_co2 = 0;
                         }
-                        try{
+                        try {
                             limit_tvoc = Integer.parseInt(edit_limitTVOC.getText().toString());
-                        }catch (NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             limit_tvoc = 0;
                         }
                         listener.saveLimits(limit_co2, limit_tvoc);
@@ -69,10 +71,10 @@ public class DialogLimiter extends AppCompatDialogFragment {
         edit_limitTVOC = view.findViewById(R.id.edit_limitTVOC);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
-        edit_limitCO2.setText(settings.getInt("limit_CO2", 6500) + "");
-        edit_limitTVOC.setText(settings.getInt("limit_TVOC", 800) + "");
-        Log.d("SharedPreferences","CO2 :" + settings.getInt("limit_CO2", 6500) + "");
-        Log.d("SharedPreferences","TVOC :" + settings.getInt("limit_TVOC", 800) + "");
+        edit_limitCO2.setText(String.format("%d", settings.getInt("limit_CO2", 6500)));
+        edit_limitTVOC.setText(String.format("%d", settings.getInt("limit_TVOC", 800)));
+        Log.d("SharedPreferences", String.format("CO2: %d", settings.getInt("limit_CO2", 6500)));
+        Log.d("SharedPreferences", String.format("TVOC: %d", settings.getInt("limit_TVOC", 800)));
         return builder.create();
     }
 
