@@ -171,35 +171,35 @@ public class BluetoothMessageService extends Service {
                                 temp_freq = Integer.parseInt(messageJSON.get("ftemp").toString());
                                 temp_freqLiveData.setValue(temp_freq);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                                //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 mic_freq = Integer.parseInt(messageJSON.get("fmic").toString());
                                 mic_freqLiveData.setValue(mic_freq);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                               // Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 resp_freq = Integer.parseInt(messageJSON.get("fresp").toString());
                                 resp_freqLiveData.setValue(resp_freq);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                                //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 valid = Integer.parseInt(messageJSON.get("val").toString());
                                 validLiveData.setValue(valid);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                                //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 resp_type = Integer.parseInt(messageJSON.get("tresp").toString());
                                 resp_typeLiveData.setValue(resp_type);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                               // Log.e("BTService", ex.toString());
                             }
 
                             try {
@@ -207,14 +207,14 @@ public class BluetoothMessageService extends Service {
                                 ratioLiveData.setValue(ratio);
                                 Log.d("Service Message", "ratio: " + ratio);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                                //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 temperature = Integer.parseInt(messageJSON.get("temp").toString());
                                 temperatureLiveData.setValue(temperature);
                             } catch (Exception ex) {
-                                Log.e("BTService", ex.toString());
+                                //Log.e("BTService", ex.toString());
                             }
 
                             co2LiveData.setValue(co2);
@@ -233,7 +233,6 @@ public class BluetoothMessageService extends Service {
                                 Log.d("Database BTService", "Data Entry Failure");
                             }
                             if (co2 > settings.getInt("limit_CO2", 6500) || tvoc > settings.getInt("limit_TVOC", 800)) {
-                                //showRemoveMaskDialog();
                                 Log.d("NotificationWarning", "Remove Mask");
                                 Intent intent = new Intent(getApplicationContext(), AlarmWarningReciever.class);
                                 sendBroadcast(intent);
