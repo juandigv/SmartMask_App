@@ -1,8 +1,5 @@
 package com.covid.smartmask;
 
-import static com.covid.smartmask.MainActivity.dangerCO2;
-import static com.covid.smartmask.MainActivity.dangerTVOC;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
@@ -11,11 +8,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +50,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     private Vibrator phoneVibrator;
     private Boolean inExercise = false;
     private Boolean exerciseDone = false;
+    private SharedPreferences settings;
 
     boolean mBounded;
     BluetoothMessageService BtMsgService;
@@ -83,6 +83,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
         androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         phoneVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         DbHelper dbHelper = DbHelper.getInstance(ExerciseActivity.this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -203,7 +204,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                             if (inExercise) {
                                 textCO2.setText(integer.toString() + " ppm");
                             }
-                            if (integer > dangerCO2) {
+                            if (integer > settings.getInt("limit_CO2", 6500) ) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -215,7 +216,7 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
                             if (inExercise) {
                                 textTVOC.setText(integer.toString() + " ppb");
                             }
-                            if (integer > dangerTVOC) {
+                            if (integer > settings.getInt("limit_TVOC", 800) ) {
                                 showRemoveMaskDialog();
                             }
                         }

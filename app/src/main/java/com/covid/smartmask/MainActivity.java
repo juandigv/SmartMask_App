@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.covid.smartmask.db.DbData;
 import com.covid.smartmask.db.DbHelper;
 import com.covid.smartmask.dialog.DialogActivities;
+import com.covid.smartmask.dialog.DialogLimiter;
 import com.covid.smartmask.dialog.DialogOximetro;
 import com.covid.smartmask.dialog.DialogSync;
 import com.covid.smartmask.dialog.DialogTimer;
@@ -55,7 +56,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener, DialogSync.DialogSyncListener {
+public class MainActivity extends AppCompatActivity implements DialogOximetro.DialogOximetroListener, DialogTimer.DialogTimerListener, DialogActivities.DialogActivitiesListener, DialogSync.DialogSyncListener, DialogLimiter.DialogLimiterListener {
 
     private TextView textBtName;
     private TextView textBtAddress;
@@ -74,11 +75,10 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private DbData dbData;
     private Vibrator phoneVibrator;
     private String androidId;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
     private int temp_msg_time = 300000;
-
-    public static final int dangerCO2 = 600;
-    public static final int dangerTVOC = 60;
 
 
     private Calendar calendarStart;
@@ -136,9 +136,9 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                 Settings.Secure.ANDROID_ID);
         phoneVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         initializeChart();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = settings.edit();
         setSyncValues(settings.getString("syncURL", ""), settings.getBoolean("syncData", false));
-
 
         btnActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         btnActivity.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
                 int calendarStartHour = settings.getInt("calendarStartHour", -1);
                 int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
                 int calendarEndHour = settings.getInt("calendarEndHour", -1);
@@ -178,6 +177,20 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             @Override
             public boolean onLongClick(View view) {
                 showSyncDialog();
+                return true;
+            }
+        });
+        textCO2.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showLimitDialog();
+                return true;
+            }
+        });
+        textTVOC.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showLimitDialog();
                 return true;
             }
         });
@@ -238,6 +251,11 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
     private void showSyncDialog() {
         DialogSync dialogSync = new DialogSync();
         dialogSync.show(getSupportFragmentManager(), "Data Sync");
+    }
+
+    private void showLimitDialog() {
+        DialogLimiter dialogLimiter = new DialogLimiter();
+        dialogLimiter.show(getSupportFragmentManager(), "Sensor Limiter");
     }
 
     private void initializeChart() {
@@ -328,7 +346,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
         int difference = end - start;
         if (difference == 0 || difference < 0) {
             Toast.makeText(getBaseContext(), "Horas seleccionadas son inválidas, intente nuevamente", Toast.LENGTH_LONG).show();
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             int calendarStartHour = settings.getInt("calendarStartHour", -1);
             int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
             int calendarEndHour = settings.getInt("calendarEndHour", -1);
@@ -336,8 +353,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             DialogActivities dialogActivities = new DialogActivities(calendarStartHour, calendarStartMinute, calendarEndHour, calendarEndMinute);
             dialogActivities.show(getSupportFragmentManager(), "Horas de Actividades");
         } else {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-            SharedPreferences.Editor editor = settings.edit();
             editor.putInt("calendarStartHour", time_start.getHour());
             editor.putInt("calendarStartMinute", time_start.getMinute());
             editor.putInt("calendarEndHour", time_end.getHour());
@@ -349,8 +364,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
 
     @Override
     public void setSyncValues(String url, Boolean sync) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("syncData", sync);
         editor.putString("syncURL", url);
         editor.commit();
@@ -363,6 +376,16 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             Toast.makeText(getBaseContext(), "Sincronización Activa", Toast.LENGTH_LONG).show();
             alarmManager.setRepeating(AlarmManager.RTC, Calendar.getInstance().getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
         }
+    }
+
+    @Override
+    public void saveLimits(int limit_co2, int limit_tvoc) {
+        editor.putInt("limit_CO2", limit_co2);
+        editor.putInt("limit_TVOC", limit_tvoc);
+        editor.commit();
+        Toast.makeText(getBaseContext(), "Limites Actualizados", Toast.LENGTH_LONG).show();
+        Log.d("SharedPreferences","CO2 :" + limit_co2);
+        Log.d("SharedPreferences","TVOC :" + limit_tvoc);
     }
 
     public void setExerciseAlarms(boolean showToasts, int calendarStartHour, int calendarStartMinute, int calendarEndHour, int calendarEndMinute) {
@@ -444,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                         public void onChanged(Integer integer) {
                             textCO2.setText(integer.toString() + " ppm (CO2)");
                             addEntry(integer, 1);
-                            if (integer > dangerCO2) {
+                            if (integer > settings.getInt("limit_CO2", 6500) ) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -455,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
                         public void onChanged(Integer integer) {
                             textTVOC.setText(integer.toString() + " ppb (TVOC)");
                             addEntry(integer, 2);
-                            if (integer > dangerTVOC) {
+                            if (integer > settings.getInt("limit_TVOC", 800) ) {
                                 showRemoveMaskDialog();
                             }
                         }
@@ -500,7 +523,6 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             }
         }
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         int calendarStartHour = settings.getInt("calendarStartHour", -1);
         int calendarStartMinute = settings.getInt("calendarStartMinute", -1);
         int calendarEndHour = settings.getInt("calendarEndHour", -1);

@@ -3,8 +3,6 @@ package com.covid.smartmask.service;
 
 import static com.covid.smartmask.DispositivosVinculados.EXTRA_DEVICE_ADDRESS;
 import static com.covid.smartmask.DispositivosVinculados.EXTRA_DEVICE_NAME;
-import static com.covid.smartmask.MainActivity.dangerCO2;
-import static com.covid.smartmask.MainActivity.dangerTVOC;
 import static com.covid.smartmask.MainActivity.handlerState;
 
 import android.app.Activity;
@@ -13,10 +11,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
@@ -59,7 +59,7 @@ public class BluetoothMessageService extends Service {
     private int temp_msg_time = 300000;
     private String BtAddress;
     private String BtName;
-
+    private SharedPreferences settings;
     Callbacks activity;
 
 
@@ -105,7 +105,7 @@ public class BluetoothMessageService extends Service {
         BluetoothDevice device = btAdapter.getRemoteDevice(BtAddress);
         btNameLiveData.setValue(BtName);
         btAddressLiveData.setValue(BtAddress);
-
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         new Thread(
                 new Runnable() {
                     @Override
@@ -235,7 +235,7 @@ public class BluetoothMessageService extends Service {
                             } else {
                                 Log.d("Database BTService", "Data Entry Failure");
                             }
-                            if (co2 > dangerCO2 || tvoc > dangerTVOC) {
+                            if (co2 > settings.getInt("limit_CO2", 6500)  || tvoc >  settings.getInt("limit_TVOC", 800) ) {
                                 //showRemoveMaskDialog();
                                 Log.d("NotificationWarning", "Remove Mask");
                                 Intent intent = new Intent(getApplicationContext(), AlarmWarningReciever.class);

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <TextView
+        android:id="@+id/textViewLimitCO2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limite Aceptable [CO2 ppm]" />
+    <EditText
+        android:id="@+id/edit_limitCO2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="CO2 (ppm)"
+        android:inputType="number"
+        android:maxLength="4"
+        android:layout_below="@+id/textViewLimitCO2"
+        />
+    <TextView
+        android:id="@+id/textViewLimitTVOC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Limite Aceptable [TVOC ppb]"
+        android:layout_below="@+id/edit_limitCO2"/>
+    <EditText
+        android:id="@+id/edit_limitTVOC"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewLimitTVOC"
+        android:layout_alignParentStart="true"
+        android:hint="TVOC (ppb)"
+        android:inputType="number"
+        android:maxLength="4" />
+
+
+
+</RelativeLayout>
