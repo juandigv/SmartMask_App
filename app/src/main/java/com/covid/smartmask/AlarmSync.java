@@ -69,8 +69,6 @@ public class AlarmSync extends BroadcastReceiver {
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                         Cursor c;
                         Date cursorDate;
-                        String formattedList;
-                        List<Integer> syncedSensorList = new ArrayList<>();
                         dbData = new DbData(context);
                         c = dbData.getReadableDatabase().rawQuery("SELECT * FROM " + DbHelper.TABLE_SENSOR + " WHERE synced = 0", null);
 
@@ -101,7 +99,6 @@ public class AlarmSync extends BroadcastReceiver {
                         dbData.close();
 
                         dbData = new DbData(context);
-                        List<Integer> syncedOxiList = new ArrayList<Integer>();
                         c = dbData.getReadableDatabase().rawQuery("SELECT * FROM " + DbHelper.TABLE_OXI + " WHERE synced = 0", null);
                         if (c.moveToFirst()) {
                             do {
