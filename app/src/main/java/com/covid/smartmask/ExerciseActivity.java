@@ -59,8 +59,8 @@ public class ExerciseActivity extends AppCompatActivity implements DialogOximetr
     Intent btServiceIntent;
 
     private final long[] pattern1 = {0, 1000, 500, 1000, 500};
-    private final String[] validDict = {"Concuerdan", "Variación", "Sin Concordancia"};
-    private final String[] trepDict = {"Eupnea", "Taquipnea", "Bradipnea", "Apnea"};
+    private final String[] validDict = {"Concuerdan", "Variación", "Sin Concordancia", "Error"};
+    private final String[] trepDict = {"Eupnea", "Taquipnea", "Bradipnea", "Apnea", "Error"};
 
     @SuppressLint("HardwareIds")
     @Override

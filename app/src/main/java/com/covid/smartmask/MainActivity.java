@@ -514,8 +514,8 @@ public class MainActivity extends AppCompatActivity implements DialogOximetro.Di
             };
             if (!IsBTServiceRunning()) {
                 btServiceIntent = new Intent(this, BluetoothMessageService.class);
-                btServiceIntent.putExtra(EXTRA_DEVICE_NAME, BtAddress);
-                btServiceIntent.putExtra(EXTRA_DEVICE_ADDRESS, BtName);
+                btServiceIntent.putExtra(EXTRA_DEVICE_NAME, BtName);
+                btServiceIntent.putExtra(EXTRA_DEVICE_ADDRESS, BtAddress);
                 startService(btServiceIntent);
 
                 bindService(btServiceIntent, mConnection, BIND_AUTO_CREATE);

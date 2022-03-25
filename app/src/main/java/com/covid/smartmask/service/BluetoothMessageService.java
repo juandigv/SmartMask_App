@@ -96,11 +96,11 @@ public class BluetoothMessageService extends Service {
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         VerificarEstadoBT();
 
-        BtName = intent.getStringExtra(EXTRA_DEVICE_ADDRESS);
-        BtAddress = intent.getStringExtra(EXTRA_DEVICE_NAME);
+        BtName = intent.getStringExtra(EXTRA_DEVICE_NAME);
+        BtAddress = intent.getStringExtra(EXTRA_DEVICE_ADDRESS);
         BluetoothDevice device = btAdapter.getRemoteDevice(BtAddress);
-        btNameLiveData.setValue(BtName);
-        btAddressLiveData.setValue(BtAddress);
+        btNameLiveData.postValue(BtName);
+        btAddressLiveData.postValue(BtAddress);
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         new Thread(
                 new Runnable() {
@@ -113,13 +113,13 @@ public class BluetoothMessageService extends Service {
                             Log.d("Database BtService", "DB was Created");
                         } else {
                             Log.d("Database BtService", "DB Creation Failed");
-                            Toast.makeText(getApplicationContext(), "DB Creation Failed", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "DB Creation Failed", Toast.LENGTH_LONG).show();
                         }
 
                         try {
                             btSocket = createBluetoothSocket(device);
                         } catch (IOException e) {
-                            Toast.makeText(getBaseContext(), "La creación del Socket fallo", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getBaseContext(), "La creación del Socket fallo", Toast.LENGTH_LONG).show();
                         }
                         try {
                             btSocket.connect();
@@ -169,42 +169,42 @@ public class BluetoothMessageService extends Service {
                             tvoc = Integer.parseInt(messageJSON.get("tvoc").toString());
                             try {
                                 temp_freq = Integer.parseInt(messageJSON.get("ftemp").toString());
-                                temp_freqLiveData.setValue(temp_freq);
+                                temp_freqLiveData.postValue(temp_freq);
                             } catch (Exception ex) {
                                 //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 mic_freq = Integer.parseInt(messageJSON.get("fmic").toString());
-                                mic_freqLiveData.setValue(mic_freq);
+                                mic_freqLiveData.postValue(mic_freq);
                             } catch (Exception ex) {
                                // Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 resp_freq = Integer.parseInt(messageJSON.get("fresp").toString());
-                                resp_freqLiveData.setValue(resp_freq);
+                                resp_freqLiveData.postValue(resp_freq);
                             } catch (Exception ex) {
                                 //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 valid = Integer.parseInt(messageJSON.get("val").toString());
-                                validLiveData.setValue(valid);
+                                validLiveData.postValue(valid);
                             } catch (Exception ex) {
                                 //Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 resp_type = Integer.parseInt(messageJSON.get("tresp").toString());
-                                resp_typeLiveData.setValue(resp_type);
+                                resp_typeLiveData.postValue(resp_type);
                             } catch (Exception ex) {
                                // Log.e("BTService", ex.toString());
                             }
 
                             try {
                                 ratio = Float.parseFloat(messageJSON.get("ratio").toString());
-                                ratioLiveData.setValue(ratio);
+                                ratioLiveData.postValue(ratio);
                                 Log.d("Service Message", "ratio: " + ratio);
                             } catch (Exception ex) {
                                 //Log.e("BTService", ex.toString());
@@ -212,13 +212,13 @@ public class BluetoothMessageService extends Service {
 
                             try {
                                 temperature = Integer.parseInt(messageJSON.get("temp").toString());
-                                temperatureLiveData.setValue(temperature);
+                                temperatureLiveData.postValue(temperature);
                             } catch (Exception ex) {
                                 //Log.e("BTService", ex.toString());
                             }
 
-                            co2LiveData.setValue(co2);
-                            tvocLiveData.setValue(tvoc);
+                            co2LiveData.postValue(co2);
+                            tvocLiveData.postValue(tvoc);
 
                             Log.d("Service Message", "Temperature: " + temperature);
                             Log.d("Service Message", "co2: " + co2);
@@ -257,11 +257,11 @@ public class BluetoothMessageService extends Service {
     private void VerificarEstadoBT() {
 
         if (btAdapter == null) {
-            Toast.makeText(getBaseContext(), "El dispositivo no soporta bluetooth", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), "El dispositivo no soporta bluetooth", Toast.LENGTH_LONG).show();
         } else {
             if (btAdapter.isEnabled()) {
             } else {
-                Toast.makeText(getBaseContext(), "Se necesita encender bluetooth", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getBaseContext(), "Se necesita encender bluetooth", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -301,8 +301,8 @@ public class BluetoothMessageService extends Service {
             try {
                 mmOutStream.write(input.getBytes());
             } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "La Conexión fallo, intente conectarse nuevamente", Toast.LENGTH_LONG).show();
-                serviceWorkingLiveData.setValue(false);
+                //Toast.makeText(getBaseContext(), "La Conexión fallo, intente conectarse nuevamente", Toast.LENGTH_LONG).show();
+                serviceWorkingLiveData.postValue(false);
             }
         }
     }
